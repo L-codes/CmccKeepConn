@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*-coding:UTF-8-*-
-# Date 2017-06-05
+# Date 2017-06-26
 
 try:
     import requests
@@ -12,7 +12,7 @@ import random
 import signal
 
 __program__ = 'cmccKeepConn'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __author__ = 'L'
 __github__ = 'https://github.com/L-codes/cmccKeepConn'
 
@@ -62,7 +62,7 @@ class CMCC_FREE:
     def keep_conn(self, interval_min=50):
         self.counter = 0
         while True:
-            msg = self._post_request()
+            self._post_request()
             print(self._keep_status())
             time.sleep(interval_min * 60)
 
@@ -73,12 +73,16 @@ class CMCC_FREE:
         top3 = {1: '1st', 2: '2nd', 3: '3rd'}
         times = top3[self.counter] if self.counter in top3 else str(self.counter) + 'th'
         return '[+] {} - The {} certification was successful'.format(t, times)
-        
 
 
     def _post_request(self):
-        for _ in range(2):
-            r = requests.post(url=self.url, data=self.data, headers=self.headers)
+        times = 2
+        while times > 0:
+           try:
+                r = requests.post(url=self.url, data=self.data, headers=self.headers, timeout=3)
+                times -= 1
+            except:
+                pass
 
 
     def _get_url_info(self, url):
