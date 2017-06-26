@@ -78,7 +78,7 @@ class CMCC_FREE:
     def _post_request(self):
         times = 2
         while times > 0:
-           try:
+            try:
                 r = requests.post(url=self.url, data=self.data, headers=self.headers, timeout=3)
                 times -= 1
             except:
@@ -91,7 +91,7 @@ class CMCC_FREE:
                 r = requests.get(url=url, allow_redirects=True, timeout=3)
             except requests.exceptions.ProxyError:
                 raise SystemExit('[Error] Can not connect to the network, please check the proxy settings')
-            except Exception:
+            except:
                 pass
             
             wlanacname = re.search(r'wlanacname=(.*?)&', r.url)
