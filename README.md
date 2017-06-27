@@ -7,6 +7,7 @@ cmccKeepConn 是一个可以在CMCC-FREE WIFI上自动认证的工具，区别�
 - 支持python 2.x和3.x
 - 支持自动检测网络状态，无需启动和关闭脚本
 - 支持各地CMCC-FREE自动认证
+- 支持系统进入睡眠打开后保持连接
 
 # 0x03 Use examples
 ```
