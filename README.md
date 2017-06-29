@@ -1,5 +1,6 @@
 # 0x00 CmccKeepConn
 cmccKeepConn 是一个可以在CMCC-FREE WIFI上自动认证的工具，区别于其它的自动认证脚本不管认证状态，只要启动脚本就不会断开认证
+还新增了[bash shell](https://github.com/L-codes/CmccKeepConn/blob/master/cmccKeepConn.sh)版本
 
 项目地址：[https://github.com/L-codes/cmccKeepConn](https://github.com/L-codes/cmccKeepConn)
 
