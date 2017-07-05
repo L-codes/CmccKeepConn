@@ -1,23 +1,26 @@
+#!/usr/bin/env sh
 __program__='cmccKeepConn'
-__version__='1.0.0'
+__version__='1.1.0'
 __author__='L'
 __github__='https://github.com/L-codes/cmccKeepConn'
 
-trap "echo \"\r    \n[Interrupt] I guess you're off duty\"; exit" INT
 
-cat << EOF
-  ____                    _  __                ____                 
- / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __  
-| |   | '_ \` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \ 
-| |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
- \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
-                                       |_|                           
-               [ Author $__author__       Version $__version__ ]
+iplist=()
+phones=()
 
-[ Github ] $__github__
-
-[+] auto keep connect ...
-EOF
+interrupt_handler()
+{
+    echo "\r   \n[INPUT] Add one or more IPs (IP1 IP2..), or Return to quit"
+    read -p "> " context
+    echo 
+ 
+    if test -z "$context"; then
+        echo "\n[Interrupt] I guess you're off duty"
+        exit
+    else
+        add_users $context
+    fi
+}
 
 
 create_phone()
@@ -28,6 +31,21 @@ create_phone()
     do
         phone+=$((RANDOM % 10))  
     done
+}
+
+
+add_users()
+{
+    for ip in $@
+    do
+        idx=${#iplist[*]}
+        iplist[$idx]=$ip
+        create_phone
+        phones[$idx]=$phone
+        post_request $idx
+        echo "[+] IP: ${ip}, Phone: ${phone}"
+    done
+    echo 
 }
 
 
@@ -57,32 +75,68 @@ get_url_info()
 }
 
 
-keep_request()
+post_request()
 {
     url_head="http://221.176.66.85:81/wlan-portal-web/"
     url_path="service/portalAccountService.loginByPortal.rest?t=1459479089251"
-
     for i in `seq 2`
     do
         curl -i -s -k -X 'POST' --connect-timeout 3\
             -H 'User-Agent: Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)' \
             -H 'Content-Type: application/x-www-form-urlencoded; charset=utf-8'\
             -H 'X-Requested-With: XMLHttpRequest'\
-            -H "Referer: ${url_head}portal?wlanacname=${wlanacname}&wlanuserip=${wlanuserip}&wlanacssid=CMCC-FREE&spe=ggmb"\
-            -d "paramMap.USER=${phone}&paramMap.PWD=      &paramMap.wlanacname=${wlanacname}&paramMap.wlanuserip=${wlanuserip}&paramMap.actiontype=LOGIN&paramMap.wlanacssid=CMCC-FREE&paramMap.forceflag=1&paramMap.useragent=Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)&paramMap.spe=ggmb"\
+            -H "Referer: ${url_head}portal?wlanacname=${wlanacname}&wlanuserip=${iplist[$1]}&wlanacssid=CMCC-FREE&spe=ggmb"\
+            -d "paramMap.USER=${phones[$1]}&paramMap.PWD=      &paramMap.wlanacname=${wlanacname}&paramMap.wlanuserip=${iplist[$1]}&paramMap.actiontype=LOGIN&paramMap.wlanacssid=CMCC-FREE&paramMap.forceflag=1&paramMap.useragent=Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)&paramMap.spe=ggmb"\
             ${url_head}${url_path} 2> /dev/null > /dev/null
+    done
+}
+
+
+keep_request()
+{
+
+    for index in `seq 0 $((${#iplist[*]}-1))`
+    do
+        post_request $index
     done
     print_keep_status
 } 
 
 
+add_user_file()
+{
+    filename='cmccfreeip.txt'
+    if test -f $filename; then
+        echo "[INFO] Find the \"$filename\" file"
+        add_users `cat $filename`
+    fi
+}
+
+
+trap interrupt_handler INT
+
+cat << EOF
+  ____                    _  __                ____                 
+ / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __  
+| |   | '_ \` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \ 
+| |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
+ \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
+                                       |_|                           
+               [ Author $__author__       Version $__version__ ]
+
+[ Github ] $__github__
+
+[+] auto keep connect ...
+EOF
+
+
 main()
 {
-    create_phone
     get_url_info
+    add_users $wlanuserip
+    echo '[PROMPT] Press Ctrl+C to add IPs'
+    add_user_file
     
-    echo "[+] IP: ${wlanuserip}, Phone: ${phone}\n"
-
     while true
     do
         keep_request
