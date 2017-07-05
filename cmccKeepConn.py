@@ -16,7 +16,7 @@ import ipaddress
 import os
 
 __program__ = 'cmccKeepConn'
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 __author__  = 'L'
 __github__  = 'https://github.com/L-codes/cmccKeepConn'
 
@@ -141,7 +141,8 @@ class CMCC_FREE:
 
 
     def _add_users_file(self, filename = 'cmccfreeip.txt'):
-        if os.path.isfile(filename):
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
+        if os.path.isfile(path):
             print('[INFO] Find the "{}" file'.format(filename))
             with open(filename) as f:
                 ips = f.read().splitlines()
