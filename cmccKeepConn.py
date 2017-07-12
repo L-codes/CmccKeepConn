@@ -125,16 +125,16 @@ class CMCC_FREE:
         while True:
             try:
                 r = requests.get(url=url, allow_redirects=True, timeout=3)
+                wlanacname = re.search(r'wlanacname=(.*?)&', r.url)
+                wlanuserip = re.search(r'wlanuserip=(.*?)&', r.url)
+                if wlanacname and wlanuserip:
+                    wlanacname = wlanacname.group(1)
+                    wlanuserip = wlanuserip.group(1)
+                    break
             except requests.exceptions.ProxyError:
                 raise SystemExit('[Error] Can not connect to the network, please check the proxy settings')
             except:
                 pass
-            wlanacname = re.search(r'wlanacname=(.*?)&', r.url)
-            wlanuserip = re.search(r'wlanuserip=(.*?)&', r.url)
-            if wlanacname and wlanuserip:
-                wlanacname = wlanacname.group(1)
-                wlanuserip = wlanuserip.group(1)
-                break
             time.sleep(3)
             
         return wlanacname, wlanuserip
