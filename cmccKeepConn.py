@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*-coding:UTF-8-*-
-# Date 2017-07-03
+# Date 2017-07-12
 
 try:
     import requests
@@ -16,7 +16,7 @@ import ipaddress
 import os
 
 __program__ = 'cmccKeepConn'
-__version__ = '1.1.1'
+__version__ = '1.1.2'
 __author__  = 'L'
 __github__  = 'https://github.com/L-codes/cmccKeepConn'
 
