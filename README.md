@@ -1,96 +1,120 @@
 # 0x00 CmccKeepConn
-cmccKeepConn 是一个可以在CMCC-FREE WIFI上自动认证的工具，区别于其它的自动认证脚本不管认证状态，只要启动脚本就不会断开认证，新增了添加IP的功能，可以使你的手机或者多个设备的认证在一台主机上实现(详细查看0x04)
+cmccKeepConn 是一个可以在CMCC-FREE WIFI上自动认证的工具，区别于其它的自动认证脚本不管认证状态，只要启动脚本就不会断开认证，具有添加IP的功能，可以使你的手机或者多个设备的认证在一台主机上实现
 
-新增了[bash shell](https://github.com/L-codes/CmccKeepConn/blob/master/cmccKeepConn.sh)版本
+v2.0版本，使用Ruby对原[v1.x版本](https://github.com/L-codes/CmccKeepConn/releases/tag/v1.x)重构，使用多线程控制和友好的CUI界面
 
 项目地址：[https://github.com/L-codes/cmccKeepConn](https://github.com/L-codes/cmccKeepConn)
 
 # 0x01 Features
-- 支持python 2.x和3.x
-- 支持自动检测网络状态，无需启动和关闭脚本
+- 兼容windows/linux/osx等平台
+- 支持自动检测网络状态，无需重启脚本
 - 支持各地CMCC-FREE自动认证
 - 支持系统进入睡眠打开后保持连接
-- 新增添加设备IP，协助认证，Ctrl+C输入IP或者本地创建cmccfreeip.txt
+- 支持添加多个IP进行认证，并且对其IP池进行管理
+- 遇到网络不稳定等因素，无需重启脚本等待断网进行再次初始化(使用renew命令)
 
 # 0x03 Use examples
 ```
-$ python cmccKeepConn.py
+$ ruby cmccKeepConn.rb
 
-  ____                    _  __                ____                  
- / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __  
-| |   | '_ ` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \ 
+  ____                    _  __                ____
+ / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __
+| |   | '_ ` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \
 | |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
  \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
-                                       |_|                           
-               [ Author L       Version 1.1.0 ]
+                                       |_|
+               [ Author L       Version 2.0.0 ]
 
-[ Github ] https://github.com/L-codes/cmccKeepConn
+ [ Github ] https://github.com/L-codes/cmccKeepConn
 
-[+] auto keep connect ...
-[+] IP: 10.177.31.136, Phone: 13571410356
-[PROMPT] Press Ctrl+C to add IPs
+ [+] auto keep connect ...
+ [+] Initialize Successful
 
-[+] 11:35:59 - The 1st certification was successful
-[+] 12:25:59 - The 2nd certification was successful
+-> ?
+ help(?)
+ ========
+ list                List IPs info
+ add ip1,ip2...      Add IPs
+ del idx1, idx2...   Deletes the IP at the specified index
+ clear               Clear all IPs
+ save                Save all IPs to file
+ renew MIN           Renew request. (interval: 50 min)
+ exit/quit           Exit the program
 
-[Interrupt] I guess you're off duty
+-> add 10.177.25.55
+ [+] Add IP: 10.177.25.55, Phone: 13539465216
+
+-> add 10.177.25.56 10.177.25.4
+ [+] Add IP: 10.177.25.56, Phone: 13517533844
+ [+] Add IP: 10.177.25.4, Phone: 13509925580
+
+-> list
+ [0] Phone: 13565911967, IP: 10.177.25.192
+ [1] Phone: 13539465216, IP: 10.177.25.55
+ [2] Phone: 13517533844, IP: 10.177.25.56
+ [3] Phone: 13509925580, IP: 10.177.25.4
+
+-> del 0 2
+ [-] Delete IP: 10.177.25.192, Phone: 13565911967
+ [-] Delete IP: 10.177.25.56, Phone: 13517533844
+
+-> list
+ [0] Phone: 13539465216, IP: 10.177.25.55
+ [1] Phone: 13509925580, IP: 10.177.25.4
 ```
 
-# 0x04 Add IPs
+# 0x04 Preload IP list file -- cmccfreeip.txt
 
-## Method 1 - Create cmccfreeip.txt file
+## Method 1
 ```
 $ cat << EOF > cmccfreeip.txt
 10.177.30.145
+10.177.23.12
 EOF
 
-$ python cmccKeepConn.py
-  ____                    _  __                ____                  
- / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __  
-| |   | '_ ` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \ 
+$ ruby cmccKeepConn.rb
+
+  ____                    _  __                ____
+ / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __
+| |   | '_ ` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \
 | |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
  \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
-                                       |_|                           
-               [ Author L       Version 1.1.0 ]
+                                       |_|
+               [ Author L       Version 2.0.0 ]
 
-[ Github ] https://github.com/L-codes/cmccKeepConn
+ [ Github ] https://github.com/L-codes/cmccKeepConn
 
-[+] auto keep connect ...
-[+] IP: 10.177.31.136, Phone: 13587666127
-[PROMPT] Press Ctrl+C to add IPs
+ [+] auto keep connect ...
+ [+] Initialize Successful
 
-[INFO] Find the "cmccfreeip.txt" file
-[+] Add IP: 10.177.30.145, Phone: 13528291813
-
-
-[+] 12:46:55 - The 1st certification was successful
+-> list
+ [0] Phone: 13565911967, IP: 10.177.30.145
+ [1] Phone: 13539465216, IP: 10.177.23.12
 ```
 
-## Method 2 - Press Ctrl+C to add IPs
+## Method 2
 ```
-$ python cmccKeepConn.py
-  ____                    _  __                ____                  
- / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __  
-| |   | '_ ` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \ 
+$ ruby cmccKeepConn.rb
+
+  ____                    _  __                ____
+ / ___|_ __ ___   ___ ___| |/ /___  ___ _ __  / ___|___  _ __  _ __
+| |   | '_ ` _ \ / __/ __| ' // _ \/ _ \ '_ \| |   / _ \| '_ \| '_ \
 | |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
  \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
-                                       |_|                           
-               [ Author L       Version 1.1.0 ]
+                                       |_|
+               [ Author L       Version 2.0.0 ]
 
-[ Github ] https://github.com/L-codes/cmccKeepConn
+ [ Github ] https://github.com/L-codes/cmccKeepConn
 
-[+] auto keep connect ...
-[+] IP: 10.177.31.136, Phone: 13587666127
-[PROMPT] Press Ctrl+C to add IPs
+ [+] auto keep connect ...
+ [+] Initialize Successful
 
-[+] 12:46:55 - The 1st certification was successful
+-> list
+ [0] Phone: 13565911967, IP: 10.177.30.145
+ [1] Phone: 13539465216, IP: 10.177.23.12
 
-[INPUT] Add one or more IPs (IP1 IP2..), or Return to quit
-> 10.177.31.233
-
-[+] IP: 10.177.31.233, Phone: 13557104278
-
-[+] 10:06:48 - The 2st certification was successful
+-> save
+ [+] Save 2 IPs to the 'cmccfreeip.txt'
 ```
 
 # 0x05 Problem
