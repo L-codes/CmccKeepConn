@@ -6,7 +6,7 @@ require 'socket'
 require 'readline'
 
 $__program__ = 'cmccKeepConn'
-$__version__ = '2.0.0'
+$__version__ = '2.0.1'
 $__author__  = 'L'
 $__github__  = 'https://github.com/L-codes/cmccKeepConn'
 
@@ -31,9 +31,11 @@ class CMCCFree
 
   def keepconn minute
     Thread.new do 
-      keep_post @myip, @myphone
-      @ips.each{|ip, phone| keep_post(ip, phone)}
-      sleep 60 * minute
+      loop do 
+        keep_post @myip, @myphone
+        @ips.each{|ip, phone| keep_post(ip, phone)}
+        sleep 60 * minute
+      end
     end
   end
 

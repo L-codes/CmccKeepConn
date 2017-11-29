@@ -23,7 +23,7 @@ $ ruby cmccKeepConn.rb
 | |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
  \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
                                        |_|
-               [ Author L       Version 2.0.0 ]
+               [ Author L       Version 2.0.1 ]
 
  [ Github ] https://github.com/L-codes/cmccKeepConn
 
@@ -80,7 +80,7 @@ $ ruby cmccKeepConn.rb
 | |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
  \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
                                        |_|
-               [ Author L       Version 2.0.0 ]
+               [ Author L       Version 2.0.1 ]
 
  [ Github ] https://github.com/L-codes/cmccKeepConn
 
@@ -102,7 +102,7 @@ $ ruby cmccKeepConn.rb
 | |___| | | | | | (_| (__| . \  __/  __/ |_) | |__| (_) | | | | | | |
  \____|_| |_| |_|\___\___|_|\_\___|\___| .__/ \____\___/|_| |_|_| |_|
                                        |_|
-               [ Author L       Version 2.0.0 ]
+               [ Author L       Version 2.0.1 ]
 
  [ Github ] https://github.com/L-codes/cmccKeepConn
 
