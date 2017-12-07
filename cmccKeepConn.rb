@@ -4,9 +4,10 @@
 require 'net/http'
 require 'socket'
 require 'readline'
+require 'timeout'
 
 $__program__ = 'cmccKeepConn'
-$__version__ = '2.0.1'
+$__version__ = '2.0.2'
 $__author__  = 'L'
 $__github__  = 'https://github.com/L-codes/cmccKeepConn'
 
@@ -73,14 +74,19 @@ class CMCCFree
 
   def get_info host
     loop do
-      TCPSocket.open(host, 80) do |sock|
-        sock.write("GET / HTTP/1.1\r\n")
-        wlanuserip = sock.local_address.ip_address
-        data = sock.read
-        /wlanacname=(?<wlanacname>.*?)&/ =~ data
-        return wlanacname, wlanuserip if wlanacname
+      begin
+        Timeout::timeout 3 do 
+          TCPSocket.open(host, 80) do |sock|
+            sock.write("GET / HTTP/1.1\r\n")
+            wlanuserip = sock.local_address.ip_address
+            data = sock.read
+            /wlanacname=(?<wlanacname>.*?)&/ =~ data
+            return wlanacname, wlanuserip if wlanacname
+          end
+        end
+      rescue Timeout::Error
+        redo
       end
-      sleep 3
     end
   end
 
