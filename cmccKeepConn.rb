@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# Data 2017-11-29
+# Data 2018-2-5
 
 require 'net/http'
 require 'socket'
@@ -7,11 +7,11 @@ require 'readline'
 require 'timeout'
 
 $__program__ = 'cmccKeepConn'
-$__version__ = '2.0.2'
+$__version__ = '2.0.3'
 $__author__  = 'L'
 $__github__  = 'https://github.com/L-codes/cmccKeepConn'
 
-trap("INT"){ puts "\r [!!!] Interrupt. "; exit }
+trap("INT"){ abort "\r [!!!] Interrupt. " }
 
 
 class CMCCFree
@@ -76,6 +76,7 @@ class CMCCFree
     loop do
       begin
         Timeout::timeout 3 do 
+          puts 'test1'
           TCPSocket.open(host, 80) do |sock|
             sock.write("GET / HTTP/1.1\r\n")
             wlanuserip = sock.local_address.ip_address
@@ -86,6 +87,8 @@ class CMCCFree
         end
       rescue Timeout::Error
         redo
+      rescue SocketError
+        abort "[!] Please check the Proxy and DNS settings"
       end
     end
   end
