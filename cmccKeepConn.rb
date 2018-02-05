@@ -76,7 +76,6 @@ class CMCCFree
     loop do
       begin
         Timeout::timeout 3 do 
-          puts 'test1'
           TCPSocket.open(host, 80) do |sock|
             sock.write("GET / HTTP/1.1\r\n")
             wlanuserip = sock.local_address.ip_address
